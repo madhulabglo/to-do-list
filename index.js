@@ -4,6 +4,7 @@ const connectToDatabase = require("./src/config/db.config")
 const port = process.env.PORT||3000
 
 const todoListRouter = require("./src/routes/todolist.router")
+const RegisterRouter =  require("./src/routes/register.router")
 
 
 const app = express();
@@ -13,6 +14,7 @@ app.get("/", (req, res) => {
   res.send("Server is Running");
 });
 
+app.use(RegisterRouter)
 app.use(`/todolist-tasks`,todoListRouter)
 
 
