@@ -2,14 +2,17 @@ const express = require("express");
 const router = express.Router();
 const todolistController = require("../controllers/todolist.controllers");
 
-router.post(`/create`, todolistController.createTask);
+const {authenticateToken} = require("../middleware/tokenverify")
 
-router.get(`/alllist`, todolistController.getAllTasks);
 
-router.get(`/alllist/:id/`, todolistController.getIntidualTask);
+router.post(`/create`,authenticateToken, todolistController.createTask);
 
-router.put(`/alllist/:id/`, todolistController.updateTask);
+router.get(`/alllist`,authenticateToken, todolistController.getAllTasks);
 
-router.delete(`/alllist/:id/`, todolistController.deleteTask);
+router.get(`/alllist/:id/`,authenticateToken, todolistController.getIntidualTask);
+
+router.put(`/alllist/:id/`,authenticateToken,todolistController.updateTask);
+
+router.delete(`/alllist/:id/`,authenticateToken,todolistController.deleteTask);
 
 module.exports = router;

@@ -5,6 +5,7 @@ const port = process.env.PORT||3000
 
 const todoListRouter = require("./src/routes/todolist.router")
 const RegisterRouter =  require("./src/routes/register.router")
+const MailRouter = require('./src/routes/mail.router')
 
 
 const app = express();
@@ -16,6 +17,7 @@ app.get("/", (req, res) => {
 
 app.use(RegisterRouter)
 app.use(`/todolist-tasks`,todoListRouter)
+app.use(MailRouter)
 
 
 connectToDatabase()

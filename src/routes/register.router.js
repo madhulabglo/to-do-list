@@ -5,6 +5,8 @@ const path = require('path');
 
 
 const registerController = require("../controllers/register.controllers")
+const {authenticateToken} = require("../middleware/tokenverify")
+
 
 router.use(express.static("public"))
 const storage = multer.diskStorage({
@@ -25,5 +27,6 @@ const storage = multer.diskStorage({
 
 router.post('/register', upload.single('image'), registerController.Register);
 router.post(`/login`,registerController.login)
+router.post(`/logout`,authenticateToken,registerController.logout)
 
 module.exports = router

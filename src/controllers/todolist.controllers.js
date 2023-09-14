@@ -1,6 +1,27 @@
 const toDolistDatas = require("../models/todolistModel");
+const jwt = require('jsonwebtoken')
 
+require("dotenv").config();
 
+function authenticateToken(req,res,next){
+  const authHeader = req.headers.authorization
+  console.log(authHeader,"auth")
+  const token = authHeader && authHeader.split(' ')[1]
+  if(token === undefined) return res.status(401).json({error:"can't get token"})
+
+  if (tokenBlacklist.has(token)) {
+    return res.status(401).json({ message: 'Token is revoked' });
+  }
+
+  jwt.verify(token,process.env.JWT_ACCESS_SECRET,(err,decode)=>{
+    if (err) throw res.status(401).json({error:"The give token is mismatched"})
+
+    req.user = decode
+    next();
+
+  })
+  
+}
 // post task in to-do list
 
 async function createTask (req, res) {
@@ -31,6 +52,7 @@ async function createTask (req, res) {
 //get all task
 
  async function getAllTasks (req, res){
+ 
   try {
     const allList = await toDolistDatas.find();
     if (allList) {
@@ -120,11 +142,14 @@ async function updateTask (req, res) {
   }
 };
 
+
+
 module.exports = {
   createTask,
   getAllTasks,
   getIntidualTask,
   updateTask,
-  deleteTask
+  deleteTask,
+  authenticateToken
 
 }
